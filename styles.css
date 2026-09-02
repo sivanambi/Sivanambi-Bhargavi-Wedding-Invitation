@@ -1,0 +1,406 @@
+:root {
+  --maroon: #54182a;
+  --maroon-deep: #3d0f1d;
+  --gold: #b98a4c;
+  --gold-light: #d1aa6b;
+  --cream: #f7f0e7;
+  --paper: #fbf8f3;
+  --ink: #25161b;
+  --muted: #75666a;
+  --line: #ded3c5;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "DM Sans", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; }
+section { position: relative; }
+.section { padding: 96px 28px; }
+.eyebrow {
+  margin: 0 0 24px;
+  color: #98764a;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .34em;
+  text-align: center;
+}
+.eyebrow.light { color: #e2cda9; }
+h1, h2, h3, .couple-names, .event-card h3, .venue h2, .route-card strong {
+  font-family: "Cormorant Garamond", Georgia, serif;
+}
+h2 {
+  margin: 0;
+  font-size: clamp(54px, 10vw, 82px);
+  line-height: .92;
+  font-weight: 500;
+  letter-spacing: -.025em;
+  text-align: center;
+}
+.lead {
+  max-width: 590px;
+  margin: 34px auto 0;
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1.65;
+  text-align: center;
+}
+.button {
+  display: inline-flex;
+  min-height: 56px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 32px;
+  border: 1px solid transparent;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .17em;
+  transition: transform .2s ease, opacity .2s ease;
+}
+.button:hover { transform: translateY(-2px); opacity: .92; }
+.button-gold { background: var(--gold); color: white; }
+.button-dark { background: var(--maroon); color: white; }
+.button-outline { border-color: rgba(255,255,255,.7); color: white; }
+.button-outline-dark { border-color: var(--maroon); color: var(--maroon); }
+
+/* Hero */
+.hero {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  color: white;
+}
+.hero-photo {
+  position: absolute;
+  inset: 0;
+  background:
+    url("assets/couple.jpg") center 45% / cover no-repeat;
+  transform: scale(1.02);
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(35,8,18,.16), rgba(45,7,22,.76));
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  width: min(90%, 680px);
+  text-align: center;
+  padding: 60px 20px;
+}
+.hero h1 {
+  margin: 0;
+  font-size: clamp(78px, 17vw, 145px);
+  line-height: .65;
+  font-weight: 500;
+}
+.hero .ampersand {
+  margin: 30px 0 20px;
+  color: #d8b06b;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 50px;
+}
+.hero-date {
+  margin: 42px 0 32px;
+  font-size: 13px;
+  letter-spacing: .32em;
+}
+.hero .button { margin-top: 10px; }
+
+/* Intro */
+.intro { background: var(--paper); }
+.couple-names {
+  margin: 55px auto 0;
+  text-align: center;
+  color: var(--maroon);
+  font-size: clamp(40px, 8vw, 68px);
+  line-height: 1.05;
+}
+.couple-names span {
+  display: block;
+  margin: 12px 0;
+  color: var(--gold);
+  font-size: 34px;
+}
+
+/* Events */
+.events { background: var(--cream); }
+.section-heading { margin-bottom: 60px; }
+.event-card {
+  width: min(100%, 650px);
+  margin: 0 auto 42px;
+  padding: 56px 28px 30px;
+  text-align: center;
+  overflow: hidden;
+}
+.event-card:last-child { margin-bottom: 0; }
+.event-reception { background: var(--maroon); color: white; }
+.event-wedding { background: #fffdf9; color: var(--ink); }
+.event-number {
+  position: absolute;
+  top: 16px;
+  right: 26px;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 74px;
+  line-height: 1;
+  opacity: .18;
+}
+.event-card h3 {
+  margin: 0;
+  font-size: clamp(58px, 12vw, 84px);
+  line-height: .9;
+  font-weight: 500;
+}
+.event-card h3 strong { font-weight: 700; }
+.event-time {
+  margin: 34px 0;
+  font-size: 19px;
+  letter-spacing: .04em;
+}
+.gold-rule {
+  width: 135px;
+  height: 2px;
+  margin: 0 auto 32px;
+  background: var(--gold-light);
+}
+.event-venue {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.65;
+}
+.event-location {
+  margin: 16px 0 30px;
+  font-size: 18px;
+  color: inherit;
+  opacity: .8;
+}
+.countdown-panel {
+  margin: 42px -28px -30px;
+  padding: 28px 16px 30px;
+  border-top: 1px solid rgba(255,255,255,.18);
+  background: rgba(0,0,0,.11);
+}
+.countdown-panel-light {
+  border-color: var(--line);
+  background: #f5efe6;
+}
+.countdown-label {
+  margin: 0 0 22px;
+  color: #a98555;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .23em;
+}
+.countdown {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+.countdown div { text-align: center; }
+.countdown strong {
+  display: block;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(34px, 7vw, 48px);
+  line-height: 1;
+  font-weight: 600;
+  color: inherit;
+}
+.countdown span {
+  display: block;
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: .15em;
+}
+
+/* Venue */
+.venue {
+  background: #f3e8da;
+  text-align: center;
+}
+.venue h2 { font-size: clamp(54px, 10vw, 82px); }
+.venue-subtitle {
+  margin: 30px 0 44px;
+  color: var(--muted);
+  font-size: 20px;
+}
+.venue-card {
+  width: min(100%, 620px);
+  margin: 0 auto;
+  padding: 48px 26px;
+  background: #fffdf8;
+  border: 1px solid var(--line);
+  box-shadow: 0 18px 55px rgba(70, 38, 24, .08);
+}
+.venue-icon {
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  background: var(--maroon);
+  color: #f5c56d;
+  font-size: 25px;
+}
+.venue-address {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.7;
+}
+.venue-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 34px 0;
+}
+.venue-details div {
+  padding: 18px 10px;
+  border: 1px solid var(--line);
+}
+.venue-details span, .venue-details strong {
+  display: block;
+}
+.venue-details span {
+  margin-bottom: 7px;
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .16em;
+}
+.venue-details strong {
+  font-size: 15px;
+}
+
+/* Reach */
+.reach { background: var(--paper); }
+.route-list {
+  width: min(100%, 650px);
+  margin: 52px auto 0;
+}
+.route-card {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 24px;
+  background: #f7efe4;
+  border: 1px solid transparent;
+  transition: transform .2s ease, border-color .2s ease;
+}
+.route-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--gold);
+}
+.route-icon {
+  flex: 0 0 58px;
+  font-size: 31px;
+  text-align: center;
+}
+.route-copy strong {
+  display: block;
+  font-size: 28px;
+  line-height: 1;
+  font-weight: 600;
+}
+.route-copy small, .route-copy em {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  font-family: "DM Sans", Arial, sans-serif;
+  font-size: 13px;
+  font-style: normal;
+}
+.route-copy em {
+  color: var(--maroon);
+  font-weight: 600;
+}
+.route-info {
+  margin: 30px 0 16px;
+  padding: 28px 24px;
+  border: 1px solid var(--line);
+}
+.route-info .eyebrow { margin-bottom: 10px; }
+.route-info h3 {
+  margin: 0 0 18px;
+  font-size: 32px;
+  font-weight: 500;
+}
+.route-info ul {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+.route-note {
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+/* Closing */
+.closing { background: var(--paper); }
+.closing-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 46px;
+}
+.footer {
+  padding: 72px 28px;
+  background: #3f0f20;
+  color: white;
+  text-align: center;
+}
+.footer > div {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 46px;
+  line-height: .95;
+}
+.footer small {
+  display: block;
+  margin-top: 28px;
+  color: #d8bd93;
+  font-size: 11px;
+  letter-spacing: .23em;
+}
+
+/* Floating music button */
+.music-toggle {
+  position: fixed;
+  z-index: 50;
+  right: 20px;
+  bottom: 20px;
+  width: 58px;
+  height: 58px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--maroon);
+  color: white;
+  font-size: 22px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.18);
+  cursor: pointer;
+}
+.music-toggle.is-playing { background: var(--gold); }
+
+@media (max-width: 520px) {
+  .section { padding: 76px 20px; }
+  .hero h1 { font-size: 78px; }
+  .hero .ampersand { margin: 24px 0 15px; }
+  .hero-date { letter-spacing: .22em; }
+  .couple-names { font-size: 42px; }
+  .event-card { padding-left: 20px; padding-right: 20px; }
+  .countdown-panel { margin-left: -20px; margin-right: -20px; }
+  .venue-details { grid-template-columns: 1fr; }
+  .closing-actions { flex-direction: column; }
+  .route-copy strong { font-size: 25px; }
+}
