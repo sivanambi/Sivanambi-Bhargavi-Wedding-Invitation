@@ -1,66 +1,176 @@
-(() => {
-  const countdowns = document.querySelectorAll(".countdown");
+document.addEventListener("DOMContentLoaded", () => {
+  // =========================
+  // WEDDING COUNTDOWNS
+  // =========================
 
-  function updateCountdown(el) {
-    const target = new Date(el.dataset.target).getTime();
-    const now = Date.now();
-    let diff = target - now;
+  const events = [
+    {
+      id: "reception-countdown",
+      date: "2026-09-12T19:00:00+05:30"
+    },
+    {
+      id: "wedding-countdown",
+      date: "2026-09-13T08:00:00+05:30"
+    }
+  ];
 
-    if (diff <= 0) {
-      el.querySelector("[data-days]").textContent = "00";
-      el.querySelector("[data-hours]").textContent = "00";
-      el.querySelector("[data-minutes]").textContent = "00";
-      el.querySelector("[data-seconds]").textContent = "00";
+  function updateCountdown(event) {
+    const container = document.getElementById(event.id);
+
+    if (!container) return;
+
+    const target = new Date(event.date).getTime();
+    const now = new Date().getTime();
+    const difference = target - now;
+
+    if (difference <= 0) {
+      container.innerHTML = `
+        <div class="countdown-finished">
+          The celebration has begun ❤️
+        </div>
+      `;
       return;
     }
 
-    const second = 1000;
-    const minute = second * 60;
-    const hour = minute * 60;
-    const day = hour * 24;
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor(
+      (difference / (1000 * 60 * 60)) % 24
+    );
+    const minutes = Math.floor(
+      (difference / (1000 * 60)) % 60
+    );
+    const seconds = Math.floor(
+      (difference / 1000) % 60
+    );
 
-    const days = Math.floor(diff / day);
-    diff %= day;
-    const hours = Math.floor(diff / hour);
-    diff %= hour;
-    const minutes = Math.floor(diff / minute);
-    diff %= minute;
-    const seconds = Math.floor(diff / second);
+    const dayEl = container.querySelector("[data-days]");
+    const hourEl = container.querySelector("[data-hours]");
+    const minuteEl = container.querySelector("[data-minutes]");
+    const secondEl = container.querySelector("[data-seconds]");
 
-    el.querySelector("[data-days]").textContent = String(days).padStart(2, "0");
-    el.querySelector("[data-hours]").textContent = String(hours).padStart(2, "0");
-    el.querySelector("[data-minutes]").textContent = String(minutes).padStart(2, "0");
-    el.querySelector("[data-seconds]").textContent = String(seconds).padStart(2, "0");
+    if (dayEl) dayEl.textContent = String(days).padStart(2, "0");
+    if (hourEl) hourEl.textContent = String(hours).padStart(2, "0");
+    if (minuteEl) minuteEl.textContent = String(minutes).padStart(2, "0");
+    if (secondEl) secondEl.textContent = String(seconds).padStart(2, "0");
   }
 
-  function tick() {
-    countdowns.forEach(updateCountdown);
+  events.forEach(updateCountdown);
+
+  setInterval(() => {
+    events.forEach(updateCountdown);
+  }, 1000);
+
+
+  // =========================
+  // BACKGROUND MUSIC
+  // =========================
+
+  const music = new Audio("assets/music.mp3");
+
+  music.loop = true;
+  music.volume = 0.7;
+
+  let musicPlaying = false;
+
+  // OPEN INVITATION BUTTON
+  const openInvitation = document.querySelector(
+    "#openInvitation, .open-invitation, [data-open-invitation]"
+  );
+
+  if (openInvitation) {
+    openInvitation.addEventListener("click", () => {
+      music.play()
+        .then(() => {
+          musicPlaying = true;
+          updateMusicButton();
+        })
+        .catch(() => {
+          console.log("Music playback was blocked by the browser.");
+        });
+    });
   }
-  tick();
-  setInterval(tick, 1000);
 
-  // The original design has a floating music control.
-  // Add assets/music.mp3 if you want background music; the button fails gracefully
-  // when no audio file is present.
-  const toggle = document.getElementById("musicToggle");
-  const audio = document.getElementById("weddingMusic");
 
-  toggle.addEventListener("click", async () => {
-    if (!audio.src) {
-      alert("Add your music file as assets/music.mp3 to enable the music button.");
-      return;
-    }
+  // =========================
+  // FLOATING MUSIC BUTTON
+  // =========================
 
-    try {
-      if (audio.paused) {
-        await audio.play();
-        toggle.classList.add("is-playing");
+  const musicButton = document.querySelector(
+    "#musicButton, .music-button, [data-music-button]"
+  );
+
+  function updateMusicButton() {
+    if (!musicButton) return;
+
+    musicButton.textContent = musicPlaying ? "🔊" : "🔇";
+    musicButton.setAttribute(
+      "aria-label",
+      musicPlaying ? "Pause music" : "Play music"
+    );
+  }
+
+  if (musicButton) {
+    musicButton.addEventListener("click", () => {
+      if (musicPlaying) {
+        music.pause();
+        musicPlaying = false;
       } else {
-        audio.pause();
-        toggle.classList.remove("is-playing");
+        music.play()
+          .then(() => {
+            musicPlaying = true;
+          })
+          .catch(() => {
+            console.log("Music playback was blocked.");
+          });
       }
-    } catch {
-      alert("Tap the music button again after allowing audio playback.");
-    }
+
+      updateMusicButton();
+    });
+  }
+
+  updateMusicButton();
+
+
+  // =========================
+  // SMOOTH SCROLL
+  // =========================
+
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener("click", event => {
+      const targetId = link.getAttribute("href");
+
+      if (!targetId || targetId === "#") return;
+
+      const target = document.querySelector(targetId);
+
+      if (target) {
+        event.preventDefault();
+
+        target.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+      }
+    });
   });
-})();
+
+
+  // =========================
+  // BACK TO TOP
+  // =========================
+
+  const backToTop = document.querySelector(
+    "#backToTop, .back-to-top, [data-back-to-top]"
+  );
+
+  if (backToTop) {
+    backToTop.addEventListener("click", event => {
+      event.preventDefault();
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    });
+  }
+});
