@@ -1,176 +1,179 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // =========================
-  // WEDDING COUNTDOWNS
-  // =========================
 
-  const events = [
-    {
-      id: "reception-countdown",
-      date: "2026-09-12T19:00:00+05:30"
-    },
-    {
-      id: "wedding-countdown",
-      date: "2026-09-13T08:00:00+05:30"
-    }
-  ];
+  // ==========================================
+  // COUNTDOWNS
+  // ==========================================
 
-  function updateCountdown(event) {
-    const container = document.getElementById(event.id);
+  const countdowns = document.querySelectorAll(".countdown");
 
-    if (!container) return;
+  function updateCountdown(countdown) {
+    const targetDate = new Date(
+      countdown.dataset.target
+    ).getTime();
 
-    const target = new Date(event.date).getTime();
-    const now = new Date().getTime();
-    const difference = target - now;
+    const now = Date.now();
+    const difference = targetDate - now;
+
+    const days = countdown.querySelector("[data-days]");
+    const hours = countdown.querySelector("[data-hours]");
+    const minutes = countdown.querySelector("[data-minutes]");
+    const seconds = countdown.querySelector("[data-seconds]");
 
     if (difference <= 0) {
-      container.innerHTML = `
-        <div class="countdown-finished">
-          The celebration has begun ❤️
-        </div>
-      `;
+      days.textContent = "00";
+      hours.textContent = "00";
+      minutes.textContent = "00";
+      seconds.textContent = "00";
       return;
     }
 
-    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-    const hours = Math.floor(
-      (difference / (1000 * 60 * 60)) % 24
-    );
-    const minutes = Math.floor(
-      (difference / (1000 * 60)) % 60
-    );
-    const seconds = Math.floor(
-      (difference / 1000) % 60
-    );
+    const totalSeconds = Math.floor(difference / 1000);
 
-    const dayEl = container.querySelector("[data-days]");
-    const hourEl = container.querySelector("[data-hours]");
-    const minuteEl = container.querySelector("[data-minutes]");
-    const secondEl = container.querySelector("[data-seconds]");
+    const d = Math.floor(totalSeconds / 86400);
+    const h = Math.floor((totalSeconds % 86400) / 3600);
+    const m = Math.floor((totalSeconds % 3600) / 60);
+    const s = totalSeconds % 60;
 
-    if (dayEl) dayEl.textContent = String(days).padStart(2, "0");
-    if (hourEl) hourEl.textContent = String(hours).padStart(2, "0");
-    if (minuteEl) minuteEl.textContent = String(minutes).padStart(2, "0");
-    if (secondEl) secondEl.textContent = String(seconds).padStart(2, "0");
+    days.textContent = String(d).padStart(2, "0");
+    hours.textContent = String(h).padStart(2, "0");
+    minutes.textContent = String(m).padStart(2, "0");
+    seconds.textContent = String(s).padStart(2, "0");
   }
 
-  events.forEach(updateCountdown);
+  function updateAllCountdowns() {
+    countdowns.forEach(updateCountdown);
+  }
 
-  setInterval(() => {
-    events.forEach(updateCountdown);
-  }, 1000);
+  updateAllCountdowns();
+  setInterval(updateAllCountdowns, 1000);
 
 
-  // =========================
-  // BACKGROUND MUSIC
-  // =========================
+  // ==========================================
+  // WEDDING MUSIC
+  // ==========================================
 
-  const music = new Audio("assets/music.mp3");
-
-  music.loop = true;
-  music.volume = 0.7;
+  const music = document.getElementById("weddingMusic");
+  const musicToggle = document.getElementById("musicToggle");
+  const openInvitation = document.getElementById("openInvitation");
 
   let musicPlaying = false;
 
-  // OPEN INVITATION BUTTON
-  const openInvitation = document.querySelector(
-    "#openInvitation, .open-invitation, [data-open-invitation]"
-  );
-
-  if (openInvitation) {
-    openInvitation.addEventListener("click", () => {
-      music.play()
-        .then(() => {
-          musicPlaying = true;
-          updateMusicButton();
-        })
-        .catch(() => {
-          console.log("Music playback was blocked by the browser.");
-        });
-    });
-  }
-
-
-  // =========================
-  // FLOATING MUSIC BUTTON
-  // =========================
-
-  const musicButton = document.querySelector(
-    "#musicButton, .music-button, [data-music-button]"
-  );
 
   function updateMusicButton() {
-    if (!musicButton) return;
+    if (!musicToggle) return;
 
-    musicButton.textContent = musicPlaying ? "🔊" : "🔇";
-    musicButton.setAttribute(
+    musicToggle.textContent = musicPlaying ? "♫" : "♪";
+
+    musicToggle.setAttribute(
       "aria-label",
       musicPlaying ? "Pause music" : "Play music"
     );
   }
 
-  if (musicButton) {
-    musicButton.addEventListener("click", () => {
+
+  // ------------------------------------------
+  // OPEN INVITATION → START MUSIC
+  // ------------------------------------------
+
+  if (openInvitation && music) {
+
+    openInvitation.addEventListener("click", () => {
+
+      music.play()
+        .then(() => {
+          musicPlaying = true;
+          updateMusicButton();
+        })
+        .catch((error) => {
+          console.log("Music could not start:", error);
+        });
+
+    });
+
+  }
+
+
+  // ------------------------------------------
+  // FLOATING MUSIC BUTTON
+  // ------------------------------------------
+
+  if (musicToggle && music) {
+
+    musicToggle.addEventListener("click", () => {
+
       if (musicPlaying) {
+
         music.pause();
         musicPlaying = false;
+
       } else {
+
         music.play()
           .then(() => {
             musicPlaying = true;
+            updateMusicButton();
           })
-          .catch(() => {
-            console.log("Music playback was blocked.");
+          .catch((error) => {
+            console.log("Music could not start:", error);
           });
+
+        return;
       }
 
       updateMusicButton();
+
     });
+
   }
 
   updateMusicButton();
 
 
-  // =========================
-  // SMOOTH SCROLL
-  // =========================
+  // ==========================================
+  // SMOOTH SCROLLING
+  // ==========================================
 
   document.querySelectorAll('a[href^="#"]').forEach(link => {
+
     link.addEventListener("click", event => {
+
       const targetId = link.getAttribute("href");
 
       if (!targetId || targetId === "#") return;
 
       const target = document.querySelector(targetId);
 
-      if (target) {
-        event.preventDefault();
+      if (!target) return;
 
-        target.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-      }
+      event.preventDefault();
+
+      target.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+
     });
+
   });
 
 
-  // =========================
+  // ==========================================
   // BACK TO TOP
-  // =========================
+  // ==========================================
 
-  const backToTop = document.querySelector(
-    "#backToTop, .back-to-top, [data-back-to-top]"
-  );
+  document.querySelectorAll('a[href="#top"]').forEach(link => {
 
-  if (backToTop) {
-    backToTop.addEventListener("click", event => {
+    link.addEventListener("click", event => {
+
       event.preventDefault();
 
       window.scrollTo({
         top: 0,
         behavior: "smooth"
       });
+
     });
-  }
+
+  });
+
 });
